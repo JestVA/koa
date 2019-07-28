@@ -3,6 +3,7 @@ const KoaRouter = require('koa-router')
 const json = require('koa-json') 
 const path = require('path')
 const render = require('koa-ejs')
+const bodyParser = require('koa-bodyparser')
 
 const app = new Koa()
 const router = new KoaRouter()
@@ -12,6 +13,12 @@ const things = ['topping up Oyster', 'paying cash', 'walking dog']
 
 // Json prettier Middleware
 app.use(json()) // using the package
+
+// Body parser
+app.use(bodyParser())
+
+// Add additional properties to context (any)
+app.context.user = 'Dori'
 
 // Simple middleware example
 // app.use(async ctx => ctx.body = {msg: 'Hello Dori'}) // like you would do for an API 
@@ -27,6 +34,8 @@ render(app, {
 // Routes
 
 router.get('/', index)
+router.get('/add', showAdd)
+router.post('/add', add)
 
 // List of things
 async function index(ctx) {
@@ -36,6 +45,17 @@ async function index(ctx) {
     })
 }
 
+// Show add page
+async function showAdd(ctx) {
+    await ctx.render('add')
+}
+
+// Add item
+async function add(ctx) {
+    const body = ctx.request.body
+    things.push(body.thing) 
+    ctx.redirect('/')
+}
 
 // Index
 // router.get('/', async ctx => {
@@ -45,7 +65,8 @@ async function index(ctx) {
 //     })
 // })
 
-router.get('/test', ctx => ctx.body = 'Hello Test')
+router.get('/test', ctx => ctx.body = `Hello ${ctx.user}`)
+router.get('/test2/:name', ctx => ctx.body = `Hello ${ctx.params.name}`) // getting parameters
 
 
 // Router Middleware
