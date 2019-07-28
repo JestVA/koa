@@ -7,6 +7,9 @@ const render = require('koa-ejs')
 const app = new Koa()
 const router = new KoaRouter()
 
+// Replace with DB
+const things = ['topping up Oyster', 'paying cash', 'walking dog']
+
 // Json prettier Middleware
 app.use(json()) // using the package
 
@@ -24,7 +27,10 @@ render(app, {
 // Create route for index page
 
 router.get('/', async ctx => {
-    await ctx.render('index')
+    await ctx.render('index', {
+        title: 'Things I do not love',
+        things // making use of ES7 feature 
+    })
 })
 
 router.get('/test', ctx => ctx.body = 'Hello Test')
