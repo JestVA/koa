@@ -24,14 +24,26 @@ render(app, {
     debug: false
 })
 
-// Create route for index page
+// Routes
 
-router.get('/', async ctx => {
+router.get('/', index)
+
+// List of things
+async function index(ctx) {
     await ctx.render('index', {
         title: 'Things I do not love',
         things // making use of ES7 feature 
     })
-})
+}
+
+
+// Index
+// router.get('/', async ctx => {
+//     await ctx.render('index', {
+//         title: 'Things I do not love',
+//         things // making use of ES7 feature 
+//     })
+// })
 
 router.get('/test', ctx => ctx.body = 'Hello Test')
 
